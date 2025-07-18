@@ -1,41 +1,35 @@
 <?php
-  /**
-  * Requires the "PHP Email Form" library
-  * The "PHP Email Form" library is available only in the pro version of the template
-  * The library should be uploaded to: vendor/php-email-form/php-email-form.php
-  * For more info and help: https://bootstrapmade.com/php-email-form/
-  */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-  // Replace contact@example.com with your real receiving email address
-  $receiving_email_address = 'nalendrakurniawan@gmail.com';
+require 'phpmailer/PHPMailer.php';
+require 'phpmailer/SMTP.php';
+require 'phpmailer/Exception.php';
 
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
-  } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
-  }
+$mail = new PHPMailer(true);
 
-  $contact = new PHP_Email_Form;
-  $contact->ajax = true;
-  
-  $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
+try {
+  // Konfigurasi SMTP Gmail
+  $mail->isSMTP();
+  $mail->Host       = 'smtp.gmail.com';
+  $mail->SMTPAuth   = true;
+  $mail->Username   = 'nalendrakurniawan@gmail.com'; // Ganti dengan email Gmail kamu
+  $mail->Password   = 'nalendrasila123';   // BUKAN password login Gmail biasa (lihat langkah 3 di bawah)
+  $mail->SMTPSecure = 'tls';
+  $mail->Port       = 587;
 
-  // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
-  /*
-  $contact->smtp = array(
-    'host' => 'example.com',
-    'username' => 'example',
-    'password' => 'pass',
-    'port' => '587'
-  );
-  */
+  // Penerima & Isi Email
+  $mail->setFrom($_POST['email'], $_POST['name']);
+  $mail->addAddress('nalendrakurniawan@gmail.com'); // Email tujuan
 
-  $contact->add_message( $_POST['name'], 'From');
-  $contact->add_message( $_POST['email'], 'Email');
-  $contact->add_message( $_POST['message'], 'Message', 10);
+  $mail->Subject = $_POST['subject'];
+  $mail->Body    = "Nama: " . $_POST['name'] . "\n";
+  $mail->Body   .= "Email: " . $_POST['email'] . "\n";
+  $mail->Body   .= "Pesan:\n" . $_POST['message'];
 
-  echo $contact->send();
+  $mail->send();
+  echo 'OK';
+} catch (Exception $e) {
+  echo "Gagal mengirim pesan. Error: {$mail->ErrorInfo}";
+}
 ?>

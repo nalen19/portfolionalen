@@ -86,7 +86,30 @@ h6 {
   color: var(--heading-color);
   font-family: var(--heading-font);
 }
+/* Form css*/
+loader {
+  border-top-color: #ef4444;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
 
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 /* PHP Email Form Messages
 ------------------------------*/
 .php-email-form .error-message {
